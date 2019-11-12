@@ -1,5 +1,7 @@
-class Gigasecond
+module Gigasecond
+  SECONDS = 1_000_000_000
+
   def self.from(from : Time)
-    from + 1_000_000_000.seconds
+    from + Gigasecond::SECONDS.seconds
   end
 end
