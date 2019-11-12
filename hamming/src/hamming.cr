@@ -4,6 +4,6 @@ module Hamming
       raise ArgumentError.new("Strands should be of same length")
     end
 
-    first_strand.chars.zip(second_strand.chars).count { |item| item[0] != item[1] }
+    first_strand.each_char.zip(second_strand.each_char).each.count { |(first, second)| first != second }
   end
 end
