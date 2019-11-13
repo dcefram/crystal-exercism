@@ -1,14 +1,12 @@
-MAP_TABLE = {
-  'G' => 'C',
-  'C' => 'G',
-  'T' => 'A',
-  'A' => 'U',
-}
-
 module RnaComplement
+  DNA_TO_RNA = {
+    'G' => 'C',
+    'C' => 'G',
+    'T' => 'A',
+    'A' => 'U',
+  }
+
   def self.of_dna(strand : String)
-    strand.each_char.reduce("") do |str, char|
-      str + (MAP_TABLE[char]? || char)
-    end
+    strand.gsub(DNA_TO_RNA)
   end
 end
