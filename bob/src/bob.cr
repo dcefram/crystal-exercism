@@ -4,7 +4,7 @@ module Bob
 
     getter?(question : Bool) { @text.ends_with?('?') }
 
-    getter?(yelling : Bool) { @text[/[A-Z]/]? != nil && @text.upcase == @text }
+    getter?(yelling : Bool) { !/[A-Z]/.match(@text).nil? && @text.upcase  == @text }
 
     getter?(yelling_question : Bool) { question? && yelling? }
 
