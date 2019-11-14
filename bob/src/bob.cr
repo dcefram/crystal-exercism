@@ -1,38 +1,25 @@
 module Bob
   class Sentence
-    def initialize(@text : String)
-    end
+    def initialize(@text : String); end
 
-    def is_question?
-      @text.rchop?('?') != nil
-    end
+    getter?(question : Bool) { @text.ends_with?('?') }
 
-    def is_yelling?
-      # would've used chars.one? but it does not seem to work properly.
-      # It's returning false even if the block returned true
-      @text.chars.find(&.ascii_letter?) && @text.upcase == @text
-    end
+    getter?(yelling : Bool) { @text[/[A-Z]/]? != nil && @text.upcase == @text }
 
-    def is_yelling_question?
-      is_question? && is_yelling?
-    end
+    getter?(yelling_question : Bool) { question? && yelling? }
 
-    def is_silent_treatment?
-      @text.strip == ""
-    end
+    getter?(silent_treatment : Bool) { @text.blank? }
   end
 
   def self.hey(text : String)
-    sentence = Sentence.new text
-
-    case sentence
-    when .is_yelling_question?
+    case Sentence.new(text)
+    when .yelling_question?
       "Calm down, I know what I'm doing!"
-    when .is_question?
+    when .question?
       "Sure."
-    when .is_yelling?
+    when .yelling?
       "Whoa, chill out!"
-    when .is_silent_treatment?
+    when .silent_treatment?
       "Fine. Be that way!"
     else
       "Whatever."
