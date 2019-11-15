@@ -1,12 +1,12 @@
 module Raindrops
-  FACTORS = {
-    3 => "Pling",
-    5 => "Plang",
-    7 => "Plong",
-  }
+  FACTORS = [
+    {3, "Pling"},
+    {5, "Plang"},
+    {7, "Plong"},
+  ]
 
   def self.convert(num : Int16)
-    converted = FACTORS.each_key.reduce("") { |str, key| num % key == 0 ? "#{str}#{FACTORS[key]}" : str }
-    converted.empty? ? "#{num}" : converted
+    converted = FACTORS.join("") { |(factor, str)| num.divisible_by?(factor) ? str : "" }
+    converted.empty? ? num.to_s : converted
   end
 end
