@@ -54,7 +54,7 @@ describe "Triangle" do
     Triangle.new([4, 4, 3]).scalene?.should eq(false)
   end
 
-  pending "Sides that violate triangle inequality are not scalene, even if they are all different" do
+  it "Sides that violate triangle inequality are not scalene, even if they are all different" do
     Triangle.new([7, 3, 2]).scalene?.should eq(false)
   end
 end
