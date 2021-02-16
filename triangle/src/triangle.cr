@@ -1,27 +1,38 @@
+enum Kind
+  Equilateral = 1
+  Isosceles   = 2
+  Scalene     = 3
+  Invalid     = 0
+end
+
 class Triangle
-  def initialize(@sides : Array(Int32)); end
+  property unique_sides : Kind
 
-  # There should be at least 2 sides that are equal, but the sum of any two sides should
-  # not be smaller than the third side
-  #
-  # sides.sum = x + y + z
-  # sides.sum - x = y + z (ie. sum of the other 2 sides)
-  # y + z should be greater or equal to x
-  #
-  # I'm using less than here, as an inverse of >=, since I'm using .nil? in the end
-  getter?(inequal : Bool) { @sides.find { |side| @sides.sum - side < side }.nil? }
+  def initialize(sides)
+    # https://en.wikipedia.org/wiki/Triangle_inequality#Mathematical_expression_of_the_constraint_on_the_sides_of_a_triangle
+    inequality = 2 * sides.max < sides.sum
 
-  getter?(equilateral : Bool) do
-    @sides.all? { |side| side != 0 && side === @sides[0] }
+    unless inequality
+      raise ArgumentError.new
+    end
+
+    hashmap = {} of Float64 | Int32 => Int32
+    unique = sides.sum(0) do |side|
+      if hashmap[side]?.nil?
+        hashmap[side] = 1
+        next 1
+      end
+
+      0
+    end
+
+    @unique_sides = Kind.new(unique)
   end
 
+  # specs indicated that isosceles should be at least 2 or more... ¯\_(ツ)_/¯
   getter?(isosceles : Bool) do
-    iso = @sides.find { |side| side != 0 && @sides.count(side) >= 2 }
-    !iso.nil? && inequal?
+    @unique_sides < Kind::Scalene
   end
 
-  getter?(scalene : Bool) do
-    is_scalene = @sides.find { |side| side != 0 && @sides.count(side) >= 2 }.nil?
-    is_scalene && inequal?
-  end
+  forward_missing_to @unique_sides
 end
